@@ -1,7 +1,7 @@
 #include "qsort.h"
 
 
-static int Partition( char** data, int left, int right )
+static int Partition( char** data, int left, int right, OneginFile file )
 {
 
     int mid = ( left - right ) / 2 + right;
@@ -12,9 +12,9 @@ static int Partition( char** data, int left, int right )
 
     while( left < right )
     {
-        while( Compare( data[left], pivot) == -1 )  left++;
+        while( Compare( data[left], pivot, file.LineLen[left], file.LineLen[mid]) == -1 )  left++;
 
-        while( Compare( data[right], pivot) == 1 ) right--;
+        while( Compare( data[right], pivot, file.LineLen[right], file.LineLen[mid]) == 1 ) right--;
 
         if( left < right )
         {
@@ -29,28 +29,22 @@ static int Partition( char** data, int left, int right )
 
 }
 
-void QSort( char** data, int left, int right )
+void QSort( char** data, int left, int right, OneginFile file )
 {
-    int mid = Partition( data, left, right );
+    int mid = Partition( data, left, right, file );
     if(mid - left > 0)
     {
-        QSort( data, left, mid - 1);
-        QSort( data, mid + 1, right );
+        QSort( data, left, mid - 1, file);
+        QSort( data, mid + 1, right, file );
     }
 
 }
 
 
-int Compare( char* lhs, char* rhs )
+int Compare( char* lhs, char* rhs, size_t lLen, size_t rLen )
 {
-    // strcmp()
-    // ;,:
-    // isalpha()
-    // tolower()
-    // A [..] a [..]
-    // tolower(str1[i]) - tolower(str2[i]);
-    size_t lLen = strlen( lhs );
-    size_t rLen = strlen( rhs );
+    //size_t lLen = strlen( lhs );
+    //size_t rLen = strlen( rhs );
     size_t minLen = min(lLen, rLen);
     
     size_t iLhs = 0;

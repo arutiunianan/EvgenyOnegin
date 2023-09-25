@@ -1,4 +1,4 @@
-#include "io.h"
+#include "ofile.h"
 #include "qsort.h"
 #include <stdlib.h>
 #include <string.h>
@@ -14,8 +14,7 @@ int main( )
     CreateBufferOfLetters( &file );
     CreateBufferOfLines( &file );
 
-
-    QSort( file.OneginLines, 0, file.LineNumber - 1 );
+    QSort( file.OneginLines, 0, file.LineNumber - 1, file );
 
     for (int i = 0; i < file.LineNumber; i++) 
     {
