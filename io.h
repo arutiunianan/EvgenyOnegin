@@ -10,11 +10,12 @@
 
 struct OneginFile
 {
-    FILE* text;
+    FILE *text;
     char *OneginLetters;
     size_t FileSize;
     size_t LineNumber;
     char **OneginLines;
+    size_t *len;
 };
 
 void OneginFileCtor(OneginFile *file);

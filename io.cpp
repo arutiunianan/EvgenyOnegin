@@ -8,6 +8,7 @@ void OneginFileCtor(OneginFile *file)
     file->FileSize = 0;
     file->LineNumber = 0;
     file->OneginLines = NULL;
+    size_t *len = NULL;
 }
 
 void CreateBufferOfLetters( OneginFile *file )
@@ -27,21 +28,25 @@ void CreateBufferOfLines( OneginFile *file )
     file->OneginLines[0] = file->OneginLetters;
     size_t line = 1;
 
+    size_t len = 0;
+    file->len = ( size_t* ) malloc( file->LineNumber );
+
     for( size_t i = 0; i < file->FileSize - 1; i++ )
     {
 
         if( file->OneginLetters[i] == '\n' )
         {
-            // OneginLines[i].str = ...;
-            // OneginLines[i].len = ...;
+            file->len[line] = len;
+            len = 0;
             file->OneginLines[line++] =  &(file->OneginLetters[i+1]);
             file->OneginLetters[i] = '\0';
         }
+        else
+            len++;
 
     }
 
 }
-
 
 size_t GetFileSize(FILE *text)
 {

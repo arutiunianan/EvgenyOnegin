@@ -14,6 +14,7 @@ int main( )
     CreateBufferOfLetters( &file );
     CreateBufferOfLines( &file );
 
+
     QSort( file.OneginLines, 0, file.LineNumber - 1 );
 
     for (int i = 0; i < file.LineNumber; i++) 
