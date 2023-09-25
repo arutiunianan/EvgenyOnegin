@@ -19,9 +19,5 @@ struct OneginFile
 };
 
 void OneginFileCtor(OneginFile *file);
-void CreateBufferOfLetters( OneginFile *file );
-void CreateBufferOfLines( OneginFile *file );
-size_t GetFileSize( FILE *text );
-size_t GetLineNumber( char* OneginLetters, size_t LetterNumber );
 
 #endif // #define OFILE_H_

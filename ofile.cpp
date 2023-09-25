@@ -1,17 +1,27 @@
 #include "ofile.h"
 
-
-void OneginFileCtor(OneginFile *file)
+static size_t GetFileSize(FILE *text)
 {
-    file->text = NULL;
-    file->OneginLetters = NULL;
-    file->FileSize = 0;
-    file->LineNumber = 0;
-    file->OneginLines = NULL;
-    size_t *leLineLenn = NULL;
+    fseek( text, 0, SEEK_END );
+    size_t LetterNumber = ftell( text );
+    fseek( text, 0, SEEK_SET );
+    return LetterNumber;
 }
 
-void CreateBufferOfLetters( OneginFile *file )
+static size_t GetLineNumber( char* OneginLetters, size_t LetterNumber )
+{
+    size_t LineNumber = 1;
+    for( size_t i = 0; i < LetterNumber; i++ )
+    {
+
+        if ( OneginLetters[i] == '\n' )
+            LineNumber++;
+
+    }
+    return LineNumber;
+}
+
+static void CreateBufferOfLetters( OneginFile *file )
 {
     assert( file->text );
 
@@ -21,7 +31,7 @@ void CreateBufferOfLetters( OneginFile *file )
 
 }
 
-void CreateBufferOfLines( OneginFile *file )
+static void CreateBufferOfLines( OneginFile *file )
 {
     file->LineNumber = GetLineNumber( file->OneginLetters, file->FileSize );
     file->OneginLines = ( char** ) calloc ( file->LineNumber, sizeof(char**) );
@@ -49,23 +59,11 @@ void CreateBufferOfLines( OneginFile *file )
 
 }
 
-size_t GetFileSize(FILE *text)
+void OneginFileCtor(OneginFile *file)
 {
-    fseek( text, 0, SEEK_END );
-    size_t LetterNumber = ftell( text );
-    fseek( text, 0, SEEK_SET );
-    return LetterNumber;
-}
+    file->text = fopen( "evgenionegin.txt", "r" );
+    //file.text = fopen( "xz.txt", "r" );
 
-size_t GetLineNumber( char* OneginLetters, size_t LetterNumber )
-{
-    size_t LineNumber = 1;
-    for( size_t i = 0; i < LetterNumber; i++ )
-    {
-
-        if ( OneginLetters[i] == '\n' )
-            LineNumber++;
-
-    }
-    return LineNumber;
+    CreateBufferOfLetters( file );
+    CreateBufferOfLines( file );
 }

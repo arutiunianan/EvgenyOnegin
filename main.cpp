@@ -8,12 +8,6 @@ int main( )
     OneginFile file = {};
     OneginFileCtor( &file);
 
-    file.text = fopen( "evgenionegin.txt", "r" );
-    //file.text = fopen( "xz.txt", "r" );
-
-    CreateBufferOfLetters( &file );
-    CreateBufferOfLines( &file );
-
     QSort( file.OneginLines, 0, file.LineNumber - 1, file );
 
     for (int i = 0; i < file.LineNumber; i++) 
