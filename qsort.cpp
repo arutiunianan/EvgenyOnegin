@@ -1,88 +1,130 @@
 #include "qsort.h"
+#include <string.h>
+#include <ctype.h>
 
-
-static int Partition( char** data, int left, int right, OneginFile file )
+int Partition( char** data, int left, int right, String* file )
 {
 
-    int mid = ( left - right ) / 2 + right;
-    char* pivot = data[mid];
-
     assert( data );
-    assert( pivot );
+    int mid = ( left - right ) / 2 + right;
+    assert(0 <= mid <= 7 );
+    char* pivot = data[mid];
+    printf("\n\n----------start--------------\n\n");
+    DebugPrint(data, left, right, 8, mid);
+    printf("----------end--------------\n\n");    
 
     while( left < right )
     {
-        while( Compare( data[left], pivot, file.LineLen[left], file.LineLen[mid]) == -1 )  left++;
+        printf("мяу");
+        
+        while( Compare( &file[left], &file[mid] ) == -1 )  left++;
 
-        while( Compare( data[right], pivot, file.LineLen[right], file.LineLen[mid]) == 1 ) right--;
-
+        while( Compare( &file[right], &file[mid] ) == 1 ) right--;
+        printf("хз ");
+        DebugPrint(data, left, right, 8, mid);
+        printf(" что это\n");
         if( left < right )
         {
-            Swap( &(data[left]), &(data[right]) );
+            Swap( &data[left], &data[right] );
+            Swap( &file[left], &file[right] );
 
             if( left == mid ) mid = right;
             else if( right == mid ) mid = left;
+            DebugPrint(data, left, right, 8, mid);
         }
+
     }
 
     return mid;
 
 }
 
-void QSort( char** data, int left, int right, OneginFile file )
+void QSort( char** data, int left, int right, String* file )
 {
     int mid = Partition( data, left, right, file );
-    if(mid - left > 0)
+    if(left < right)
     {
         QSort( data, left, mid - 1, file);
         QSort( data, mid + 1, right, file );
     }
-
 }
 
-
-int Compare( char* lhs, char* rhs, size_t lLen, size_t rLen )
+/*
+int Compare(String* lhs, String* rhs)
 {
-    //size_t lLen = strlen( lhs );
-    //size_t rLen = strlen( rhs );
-    size_t minLen = min(lLen, rLen);
+
+    size_t minLen = min( lhs->len, rhs->len );
     
     size_t iLhs = 0;
     size_t iRhs = 0;
     while( iLhs < minLen && iRhs < minLen )
     {
-        while( IsAlpha( !lhs[iLhs] ) ) iLhs++;
-        while( IsAlpha( !rhs[iRhs] ) ) iRhs++;
-        if (ToLower( lhs[iLhs] ) > ToLower( rhs[iRhs] ) && (iLhs < minLen && iRhs < minLen) ) return 1;
-        else if( ToLower( lhs[iLhs] ) < ToLower( rhs[iRhs] ) ) return -1;
+        while( !IsAlpha( lhs->str[iLhs] ) ) iLhs++;
+        while( !IsAlpha( rhs->str[iRhs] ) ) iRhs++;
+        if (ToLower( lhs->str[iLhs] ) > ToLower( rhs->str[iRhs] ) && (iLhs < minLen && iRhs < minLen) ) return 1;
+        else if( ToLower( lhs->str[iLhs] ) < ToLower( rhs->str[iRhs] ) ) return -1;
         iLhs++;
         iRhs++;
     }
 
-    if ( lLen == rLen ) return 0;
-    if ( lLen > rLen ) return 1;
+    if ( (*lhs).len == (*rhs).len ) return 0;
+    if ( (*lhs).len > (*rhs).len  ) return 1;
+    return -1;
+
+}
+*/
+
+int Compare(String* lhs, String* rhs)
+{
+    int iLhs = lhs->len - 1;
+    int iRhs = rhs->len - 1;
+
+    while( iLhs >= 0 && iRhs >= 0 )
+    {
+        while( iLhs >= 0 && !IsAlpha( lhs->str[iLhs] ) ) { iLhs--; }
+        while( iRhs >= 0 && !IsAlpha( rhs->str[iRhs] ) ) iRhs--;
+        if ( ( iLhs >= 0 && iRhs >= 0 ) && ToLower( lhs->str[iLhs] ) > ToLower( rhs->str[iRhs] ) ) return 1;
+        else if( ( iLhs >= 0 && iRhs >= 0 ) && ToLower( lhs->str[iLhs] ) < ToLower( rhs->str[iRhs] ) ) return -1;
+        iLhs--;
+        iRhs--;
+        
+    }
+
+    if ( lhs->len == rhs->len ) return 0;
+    if ( lhs->len > rhs->len ) return 1;
     return -1;
 
 }
 
-void Swap(char** lhs, char** rhs)
+
+void Swap( char** lhs, char** rhs )
 {
     char* tmp = *lhs;
 	*lhs = *rhs;
     *rhs = tmp;
 }
 
-size_t min( size_t lLen, size_t rLen)
+void Swap( String* lhs, String* rhs)
 {
+    String tmp = *lhs;
+	*lhs = *rhs;
+    *rhs = tmp;
+}
+
+size_t min( size_t lLen, size_t rLen )
+{
+    //isalpha()
     return lLen < rLen ? lLen : rLen;
 }
 
-int IsAlpha( int sym)
+// isalpha()
+
+int IsAlpha( int sym )
 {
     return ( ( sym >= 'A' && sym <= 'Z' ) || ( sym >= 'a' && sym <= 'z' ) ) ? 1 : 0;
 }
 
-int ToLower( int sym)
+int ToLower( int sym )
 {
     if( sym >= 'a' && sym <= 'z' )
         return sym;

@@ -8,16 +8,25 @@
 
 // onegin_file.h
 
+struct String
+{ 
+    char* str; 
+    int len; 
+};
+
 struct OneginFile
 {
     FILE *text;
     char *OneginLetters;
     size_t FileSize;
     size_t LineNumber;
+    String* OneginsLines;
     char **OneginLines;
-    size_t *LineLen;
+    //size_t *LineLen;
 };
 
+
 void OneginFileCtor(OneginFile *file);
+void DebugPrint(char* data[], int left, int right, int size, int mid);
 
 #endif // #define OFILE_H_
