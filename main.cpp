@@ -3,14 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-/*int comparator(char** str1, char** str2)
-{
-    return strcmp(*str1, *str2);
-}
-*/
-// int array;
-// comparator(int* lhs, int* rhs)
-// qsort(array)
 
 int main( )
 {
