@@ -21,8 +21,6 @@ struct OneginFile
     size_t FileSize;
     size_t LineNumber;
     String* OneginsLines;
-    char **OneginLines;
-    //size_t *LineLen;
 };
 
 

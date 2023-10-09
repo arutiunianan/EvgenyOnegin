@@ -3,13 +3,12 @@
 
 #include "ofile.h"
 
-void QSort( char** data, int left, int right, String* OneginsLines );
-int Partition( char** data, int left, int right, String* file );
-int Compare( String* lhs, String* rhs );
-void Swap( char** lhs, char** rhs );
+void QSort( String* file, int left, int right, int Comparator( String* lhs, String* rhs ) );
+int Partition( String* file, int left, int right, int Comparator( String* lhs, String* rhs ) );
+int CompareFirstLet( String* lhs, String* rhs );
+int CompareLastLet( String* lhs, String* rhs );
 void Swap( String* lhs, String* rhs);
 size_t min( size_t lLen, size_t rLen );
-int IsAlpha( int sym );
-int ToLower( int sym );
+void Print( OneginFile file );
 
 #endif // #define QSORT_H_

@@ -14,16 +14,14 @@
 
 int main( )
 {
+
     OneginFile file = {};
     OneginFileCtor( &file);
     
-    QSort( file.OneginLines, 0, file.LineNumber - 1, file.OneginsLines );
+    QSort( file.OneginsLines, 0, file.LineNumber - 1, CompareLastLet );
+    Print( file );
     
-    for (size_t i = 0; i < file.LineNumber; i++) 
-    {
-        printf("%s\n", file.OneginLines[i]);
-    }
-    printf("\n");
-    
+    QSort( file.OneginsLines, 0, file.LineNumber - 1, CompareFirstLet );
+    Print( file );
 
 }

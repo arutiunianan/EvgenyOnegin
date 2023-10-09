@@ -2,35 +2,28 @@
 #include <string.h>
 #include <ctype.h>
 
-int Partition( char** data, int left, int right, String* file )
+int Partition( String* strings, int left, int right, int Comparator( String* lhs, String* rhs ) )
 {
 
-    assert( data );
+    assert( strings );
     int mid = ( left - right ) / 2 + right;
     assert(0 <= mid <= 7 );
-    char* pivot = data[mid];
-    printf("\n\n----------start--------------\n\n");
-    DebugPrint(data, left, right, 8, mid);
-    printf("----------end--------------\n\n");    
 
     while( left < right )
     {
-        printf("мяу");
         
-        while( Compare( &file[left], &file[mid] ) == -1 )  left++;
+        while( Comparator( &strings[left], &strings[mid] ) == -1 )  left++;
 
-        while( Compare( &file[right], &file[mid] ) == 1 ) right--;
-        printf("хз ");
-        DebugPrint(data, left, right, 8, mid);
-        printf(" что это\n");
+        while( Comparator( &strings[right], &strings[mid] ) == 1 ) right--;
+
         if( left < right )
         {
-            Swap( &data[left], &data[right] );
-            Swap( &file[left], &file[right] );
+
+            Swap( &strings[left], &strings[right] );
 
             if( left == mid ) mid = right;
             else if( right == mid ) mid = left;
-            DebugPrint(data, left, right, 8, mid);
+
         }
 
     }
@@ -39,18 +32,18 @@ int Partition( char** data, int left, int right, String* file )
 
 }
 
-void QSort( char** data, int left, int right, String* file )
+void QSort( String* strings, int left, int right, int Comparator( String* lhs, String* rhs ) )
 {
-    int mid = Partition( data, left, right, file );
+    int mid = Partition( strings, left, right, Comparator );
     if(left < right)
     {
-        QSort( data, left, mid - 1, file);
-        QSort( data, mid + 1, right, file );
+        QSort( strings, left, mid - 1, Comparator );
+        QSort( strings, mid + 1, right, Comparator );
     }
 }
 
-/*
-int Compare(String* lhs, String* rhs)
+
+int CompareFirstLet( String* lhs, String* rhs )
 {
 
     size_t minLen = min( lhs->len, rhs->len );
@@ -59,10 +52,10 @@ int Compare(String* lhs, String* rhs)
     size_t iRhs = 0;
     while( iLhs < minLen && iRhs < minLen )
     {
-        while( !IsAlpha( lhs->str[iLhs] ) ) iLhs++;
-        while( !IsAlpha( rhs->str[iRhs] ) ) iRhs++;
-        if (ToLower( lhs->str[iLhs] ) > ToLower( rhs->str[iRhs] ) && (iLhs < minLen && iRhs < minLen) ) return 1;
-        else if( ToLower( lhs->str[iLhs] ) < ToLower( rhs->str[iRhs] ) ) return -1;
+        while( !isalpha( lhs->str[iLhs] ) ) iLhs++;
+        while( !isalpha( rhs->str[iRhs] ) ) iRhs++;
+        if ( ( iLhs < minLen && iRhs < minLen) && ( tolower( lhs->str[iLhs] ) > tolower( rhs->str[iRhs] ) )  ) return 1;
+        else if( ( iLhs < minLen && iRhs < minLen ) && ( tolower( lhs->str[iLhs] ) < tolower( rhs->str[iRhs] ) ) ) return -1;
         iLhs++;
         iRhs++;
     }
@@ -72,19 +65,19 @@ int Compare(String* lhs, String* rhs)
     return -1;
 
 }
-*/
 
-int Compare(String* lhs, String* rhs)
+
+int CompareLastLet( String* lhs, String* rhs )
 {
     int iLhs = lhs->len - 1;
     int iRhs = rhs->len - 1;
 
     while( iLhs >= 0 && iRhs >= 0 )
     {
-        while( iLhs >= 0 && !IsAlpha( lhs->str[iLhs] ) ) { iLhs--; }
-        while( iRhs >= 0 && !IsAlpha( rhs->str[iRhs] ) ) iRhs--;
-        if ( ( iLhs >= 0 && iRhs >= 0 ) && ToLower( lhs->str[iLhs] ) > ToLower( rhs->str[iRhs] ) ) return 1;
-        else if( ( iLhs >= 0 && iRhs >= 0 ) && ToLower( lhs->str[iLhs] ) < ToLower( rhs->str[iRhs] ) ) return -1;
+        while( iLhs >= 0 && !isalpha( lhs->str[iLhs] ) ) { iLhs--; }
+        while( iRhs >= 0 && !isalpha( rhs->str[iRhs] ) ) iRhs--;
+        if ( ( iLhs >= 0 && iRhs >= 0 ) && tolower( lhs->str[iLhs] ) > tolower( rhs->str[iRhs] ) ) return 1;
+        else if( ( iLhs >= 0 && iRhs >= 0 ) && tolower( lhs->str[iLhs] ) < tolower( rhs->str[iRhs] ) ) return -1;
         iLhs--;
         iRhs--;
         
@@ -97,13 +90,6 @@ int Compare(String* lhs, String* rhs)
 }
 
 
-void Swap( char** lhs, char** rhs )
-{
-    char* tmp = *lhs;
-	*lhs = *rhs;
-    *rhs = tmp;
-}
-
 void Swap( String* lhs, String* rhs)
 {
     String tmp = *lhs;
@@ -113,20 +99,16 @@ void Swap( String* lhs, String* rhs)
 
 size_t min( size_t lLen, size_t rLen )
 {
-    //isalpha()
     return lLen < rLen ? lLen : rLen;
 }
 
-// isalpha()
-
-int IsAlpha( int sym )
+void Print( OneginFile file )
 {
-    return ( ( sym >= 'A' && sym <= 'Z' ) || ( sym >= 'a' && sym <= 'z' ) ) ? 1 : 0;
-}
+    
+    for ( size_t i = 0; i < file.LineNumber; i++ ) 
+    {
+        printf( "%s\n", file.OneginsLines[i].str );
+    }
+    printf( "\n" );
 
-int ToLower( int sym )
-{
-    if( sym >= 'a' && sym <= 'z' )
-        return sym;
-    return sym + ( 'a' - 'A' );
 }
