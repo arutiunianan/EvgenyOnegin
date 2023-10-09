@@ -25,6 +25,6 @@ struct OneginFile
 
 
 void OneginFileCtor(OneginFile *file);
-void DebugPrint(char* data[], int left, int right, int size, int mid);
+void OneginFileDtor(OneginFile *file);
 
 #endif // #define OFILE_H_

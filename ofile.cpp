@@ -71,3 +71,16 @@ void OneginFileCtor( OneginFile *file )
     CreateBufferOfLines( file );
 }
 
+void OneginFileDtor( OneginFile *file )
+{
+
+    assert( file );
+    free( file->OneginLetters );
+    file->OneginLetters = NULL;
+    free( file->OneginsLines );
+    file->OneginsLines = NULL;
+    file->text = NULL;
+    file->FileSize = -1;
+    file->LineNumber = -1;
+
+}
